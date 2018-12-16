@@ -25,6 +25,7 @@ If using a standard linux distribution, you may have to use ```python3``` in pla
 
 &nbsp;
 ### Build a local virtual environment
+[Python Virtual Enviornment basics](https://docs.python-guide.org/dev/virtualenvs/#lower-level-virtualenv)
 
 The virtual environment (venv) allows clean tracking of Python dependencies within the project. venv builds virtual python, pip and library files for use by the project. Every time a new shell is created, you will need to activate the venv so that the system libraries and python are overridden by the venv libs and binaries.
 ````
@@ -58,7 +59,7 @@ $ cd ChristmasLister/
 $ . bin/activate
 ```
 
-
+To check that you're using 
 
 
 ## Docker Build commands
