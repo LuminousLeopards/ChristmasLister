@@ -1,4 +1,4 @@
-FROM python:2-alpine3.6
+FROM python:3.6-alpine
 USER nobody
 ADD christmaslister/ /opt/christmaslister
 RUN pip install --no-cache-dir -r /opt/christmaslister/requirements.txt
