@@ -1,28 +1,22 @@
 import dbsetup
 
-class listuser():
 
-    def __init__(self,firstname,lastname):
-        self.firstame = firstname,
+class ListUser:
+
+    def __init__(self, firstname, lastname):
+        self.firstame = firstname
         self.lastname = lastname
 
-    def adduser(firstname,lastname):
-        dbsetup.adduser(firstname,lastname)
-    
-    def getuser(firstname):
-        dbsetup.getuserid(firstname)
-
-#class listitem():
-#    def __init__(self,userid,itemname)
-#    self.userid = userid
-#    self.itemname = itemname
-
-    #def addlistitem(userid,itemname):
+    @staticmethod
+    def adduser(self, firstname, lastname):
+        self.userid = dbsetup.adduser(firstname, lastname)
 
 
-brian = listuser('Brian', 'Peterson')
+class ListItem:
+    def __init__(self, userid, itemname):
+        self.userid = userid
+        self.itemname = itemname
 
-listuser.adduser('brian','peterson')
-
-print(brian.firstame)
-print(listuser.getuser('Brian'))
+    @staticmethod
+    def addlistitem(self, userid, itemname):
+        dbsetup.additem(userid, itemname)
