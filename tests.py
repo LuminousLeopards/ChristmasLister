@@ -1,23 +1,34 @@
-import main,dbsetup
+import main,dbsetup,unittest
+
+# Value and type testing for ListUser class
+class TestListUser(unittest.TestCase):
+
+    def test_adduser(self):
+        testuser3 = main.ListUser('Joe', 'Smith')
+        self.assertEqual(testuser3.firstname, 'Joe')
+        self.assertEqual(testuser3.lastname, 'Smith')
+        self.assertTrue(testuser3.userid)
+
+    def test_adduser_empty(self):
+        with self.assertRaises(Exception) as context:
+            main.ListUser('', 'Smith')
+        self.assertTrue('Empty string!' in str(context.exception))
+
+    def test_adduser_int(self):
+        with self.assertRaises(Exception) as context:
+            main.ListUser('Joe', 5)
+        self.assertTrue('Invalid data type' in str(context.exception))
+
+    # def test_dbinsert(self):
+    #     with dbsetup.connect:
+    #         c = dbsetup.connect.cursor()
+    #     for row in c.execute('SELECT * from users'):
+    #         print(row)
 
 
-# def returntables():
-#     with dbsetup.connect:
-#         c = dbsetup.connect.cursor()
-#         for row in c.execute('SELECT rowid from users'):
-#             print(row)
+class TestListItem(unittest.TestCase):
 
 
-brian = main.ListUser('Brian', 'Peterson')
-main.ListUser.adduser(brian, brian.firstame, brian.lastname)
-# print(dir(brian))
-# print(type(brian))
-print("User name: ", brian.firstame, brian.lastname, ". Userid: ", brian.userid)
 
-noella = main.ListUser('Noella', 'Peterson')
-main.ListUser.adduser(noella, noella.firstame, noella.lastname)
-
-print("User name: ", noella.firstame, noella.lastname, ". Userid: ", noella.userid)
-
-#####To do : figure out workflow of how userid is associated with the list item
-#candles = main.ListItem()
+if __name__ == '__main__':
+    unittest.main()

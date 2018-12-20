@@ -1,6 +1,6 @@
 import sqlite3
 
-connect = sqlite3.connect(':memory:')
+connect = sqlite3.connect("listdb.db")
 
 c = connect.cursor()
 
@@ -21,7 +21,6 @@ c.execute("""CREATE TABLE users (
 def adduser(firstname, lastname):
     with connect:
         c.execute("INSERT INTO users VALUES (:firstname, :lastname)", {'firstname':firstname,'lastname':lastname})
-        #print(c.lastrowid)
         connect.commit()
         return c.lastrowid
 
