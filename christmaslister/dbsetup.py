@@ -1,7 +1,6 @@
 import sqlite3
 
 connect = sqlite3.connect('listdb.db')
-
 c = connect.cursor()
 
 c.execute("""CREATE TABLE IF NOT EXISTS gifts (
@@ -34,12 +33,12 @@ def additem(userid, itemname):
 
 def buyitem(itemid):
     with connect:
-        c.execute("UPDATE gifts SET bought = 1 WHERE gifts.itemid = (:itemid)", {'itemid': itemid})
+        c.execute("UPDATE gifts SET bought = 1 WHERE rowid = (:rowid)", {'rowid': itemid})
 
 
 def deleteitem(itemid):
     with connect:
-        c.execute("UPDATE gifts SET deleted = 1 WHERE gifts.itemid = (:itemid)", {'itemid': itemid})
+        c.execute("UPDATE gifts SET deleted = 1 WHERE rowid = (:rowid)", {'rowid': itemid})
 
 
 #connect.close()
