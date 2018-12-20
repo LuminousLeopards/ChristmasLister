@@ -19,6 +19,7 @@ class TestListUser(unittest.TestCase):
             main.ListUser('Joe', 5)
         self.assertTrue('Invalid data type' in str(context.exception))
 
+
     # def test_dbinsert(self):
     #     with dbsetup.connect:
     #         c = dbsetup.connect.cursor()
@@ -28,7 +29,19 @@ class TestListUser(unittest.TestCase):
 
 class TestListItem(unittest.TestCase):
 
+    def test_additem(self):
+        socks = main.ListItem(5, 'Socks')
+        self.assertEqual(socks.itemname, "Socks")
 
+    def test_additem_blank(self):
+        with self.assertRaises(Exception) as context:
+            main.ListItem(5, '')
+        self.assertTrue('No item name entered.' in str(context.exception))
+
+
+usr = main.ListUser('Guy', 'Fieri')
+print(usr.userid, usr.firstname, usr.lastname)
+usr.addlistitem(usr.userid, "Sorkc")
 
 if __name__ == '__main__':
     unittest.main()

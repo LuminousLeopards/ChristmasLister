@@ -12,3 +12,4 @@ pyvenv.cfg
 pip-selfcheck.json
 *.pyc
 *.pyo
+.idea/
