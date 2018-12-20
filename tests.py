@@ -1,5 +1,6 @@
 import main,dbsetup,unittest
 
+
 # Value and type testing for ListUser class
 class TestListUser(unittest.TestCase):
 
@@ -20,13 +21,6 @@ class TestListUser(unittest.TestCase):
         self.assertTrue('Invalid data type' in str(context.exception))
 
 
-    # def test_dbinsert(self):
-    #     with dbsetup.connect:
-    #         c = dbsetup.connect.cursor()
-    #     for row in c.execute('SELECT * from users'):
-    #         print(row)
-
-
 class TestListItem(unittest.TestCase):
 
     def test_additem(self):
@@ -39,9 +33,28 @@ class TestListItem(unittest.TestCase):
         self.assertTrue('No item name entered.' in str(context.exception))
 
 
-usr = main.ListUser('Guy', 'Fieri')
-print(usr.userid, usr.firstname, usr.lastname)
-usr.addlistitem(usr.userid, "Sorkc")
+class TestGiftUpdates(unittest.TestCase):
+
+    def test_setbought(self):
+        abe = main.ListUser('Abe', 'Lincoln')
+        pipe = main.ListItem(abe.userid, 'corncob pipe')
+        with dbsetup.connect:
+            c = dbsetup.connect.cursor()
+        bought = c.execute("SELECT bought FROM gifts WHERE rowid = (:rowid)", {'rowid': pipe.itemid}).fetchone()
+        bought = bought[0]
+        self.assertEqual(bought, 0)
+        pipe.setbought(pipe.itemid)
+        bought = c.execute("SELECT bought FROM gifts WHERE rowid = (:rowid)", {'rowid': pipe.itemid}).fetchone()
+        bought = bought[0]
+        self.assertEqual(bought, 1)
+        deleted = c.execute("SELECT deleted FROM gifts WHERE rowid = (:rowid)", {'rowid': pipe.itemid}).fetchone()
+        deleted = deleted[0]
+        self.assertEqual(deleted, 0)
+        pipe.setdeleted(pipe.itemid)
+        deleted = c.execute("SELECT deleted FROM gifts WHERE rowid = (:rowid)", {'rowid': pipe.itemid}).fetchone()
+        deleted = deleted[0]
+        self.assertEqual(deleted, 1)
+
 
 if __name__ == '__main__':
     unittest.main()
