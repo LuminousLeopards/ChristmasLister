@@ -1,23 +1,60 @@
-import main,dbsetup
+import main,dbsetup,unittest
 
 
-# def returntables():
-#     with dbsetup.connect:
-#         c = dbsetup.connect.cursor()
-#         for row in c.execute('SELECT rowid from users'):
-#             print(row)
+# Value and type testing for ListUser class
+class TestListUser(unittest.TestCase):
+
+    def test_adduser(self):
+        testuser3 = main.ListUser('Joe', 'Smith')
+        self.assertEqual(testuser3.firstname, 'Joe')
+        self.assertEqual(testuser3.lastname, 'Smith')
+        self.assertTrue(testuser3.userid)
+
+    def test_adduser_empty(self):
+        with self.assertRaises(Exception) as context:
+            main.ListUser('', 'Smith')
+        self.assertTrue('Empty string!' in str(context.exception))
+
+    def test_adduser_int(self):
+        with self.assertRaises(Exception) as context:
+            main.ListUser('Joe', 5)
+        self.assertTrue('Invalid data type' in str(context.exception))
 
 
-brian = main.ListUser('Brian', 'Peterson')
-main.ListUser.adduser(brian, brian.firstame, brian.lastname)
-# print(dir(brian))
-# print(type(brian))
-print("User name: ", brian.firstame, brian.lastname, ". Userid: ", brian.userid)
+class TestListItem(unittest.TestCase):
 
-noella = main.ListUser('Noella', 'Peterson')
-main.ListUser.adduser(noella, noella.firstame, noella.lastname)
+    def test_additem(self):
+        socks = main.ListItem(5, 'Socks')
+        self.assertEqual(socks.itemname, "Socks")
 
-print("User name: ", noella.firstame, noella.lastname, ". Userid: ", noella.userid)
+    def test_additem_blank(self):
+        with self.assertRaises(Exception) as context:
+            main.ListItem(5, '')
+        self.assertTrue('No item name entered.' in str(context.exception))
 
-#####To do : figure out workflow of how userid is associated with the list item
-#candles = main.ListItem()
+
+class TestGiftUpdates(unittest.TestCase):
+
+    def test_setbought(self):
+        abe = main.ListUser('Abe', 'Lincoln')
+        pipe = main.ListItem(abe.userid, 'corncob pipe')
+        with dbsetup.connect:
+            c = dbsetup.connect.cursor()
+        bought = c.execute("SELECT bought FROM gifts WHERE rowid = (:rowid)", {'rowid': pipe.itemid}).fetchone()
+        bought = bought[0]
+        self.assertEqual(bought, 0)
+        pipe.setbought(pipe.itemid)
+        bought = c.execute("SELECT bought FROM gifts WHERE rowid = (:rowid)", {'rowid': pipe.itemid}).fetchone()
+        bought = bought[0]
+        self.assertEqual(bought, 1)
+        deleted = c.execute("SELECT deleted FROM gifts WHERE rowid = (:rowid)", {'rowid': pipe.itemid}).fetchone()
+        deleted = deleted[0]
+        self.assertEqual(deleted, 0)
+        pipe.setdeleted(pipe.itemid)
+        deleted = c.execute("SELECT deleted FROM gifts WHERE rowid = (:rowid)", {'rowid': pipe.itemid}).fetchone()
+        deleted = deleted[0]
+        self.assertEqual(deleted, 1)
+
+
+if __name__ == '__main__':
+    unittest.main()
